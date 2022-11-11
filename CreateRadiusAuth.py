@@ -1,5 +1,6 @@
 import time
 from netmiko import ConnectHandler
+import sys
 
 ipAddr = input("Enter ip address: ")
 loginMik = input("Enter login mikrotik: ")
@@ -25,5 +26,8 @@ time.sleep(1)
 print(sshCli.send_command(showComOne))
 time.sleep(1)
 print(sshCli.send_command(showComTwo))
-
 sshCli.disconnect()
+print(" ")
+print("Successfully!")
+time.sleep(10)
+sys.exit
