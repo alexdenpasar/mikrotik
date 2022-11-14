@@ -7,9 +7,9 @@ print("####  User password change script.  ####")
 print("########################################")
 print(" ")
 
-ipAddr = input("Enter ip address: ")
-loginMik = input("Enter login mikrotik: ")
-passMik = input("Enter password mikrotik: ")
+ipAddr = input("Enter ip address Mikrotik: ")
+loginMik = input("Enter login Mikrotik: ")
+passMik = input("Enter password Mikrotik: ")
 
 mikrotik_router_1 = {
 'device_type': 'mikrotik_routeros',
@@ -39,7 +39,17 @@ while count < len(listUsers):
 print("Number of users:", count)
 
 while listStart < count:
-    print(listStart+1,"-", listUsers[resFull[listStart]+5:resFull[listStart+2]])
+    print(listUsers[resFull[listStart]+5:resFull[listStart+2]])
     listStart += 1
+
+loginMikChange = input("Enter the username for which you want to change the password: ")    
+newPassMikChange = input(f"Enter a new password for the user {loginMikChange}: ")
+confirmNewPassMikChange = input(f"Confirm new password for user {loginMikChange}: ")
+
+if newPassMikChange == confirmNewPassMikChange:
+    sshCli.send_command(f"user set password={newPassMikChange} {loginMikChange}")
+    print("Password changed successfully!")
+else:
+    print("Wrong login or password!")
 
 sshCli.disconnect()
