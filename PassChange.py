@@ -5,62 +5,78 @@ print("####  User password change script.  ####")
 print("########################################")
 print(" ")
 
-# Entering data to connect
-ipAddr = input("Enter ip address Mikrotik: ")
-loginMik = input("Enter login Mikrotik: ")
-passMik = input("Enter password Mikrotik: ")
 
-mikrotik_router_1 = {
-'device_type': 'mikrotik_routeros',
-'host': ipAddr,
-'port': '22',
-'username': loginMik,
-'password': passMik
-}
+def changePass(sshCli):
+     # Changing the password.
+    loginMikChange = input("Enter the username for which you want to change the password: ")    
+    newPassMikChange = input(f"Enter a new password for the user {loginMikChange}: ")
+    confirmNewPassMikChange = input(f"Confirm new password for user {loginMikChange}: ")
 
-# Opening ssh connection.
-sshCli = ConnectHandler(**mikrotik_router_1)
+    # Checking the correctness of the password entered and, if correct, then change.
+    if newPassMikChange == confirmNewPassMikChange:
+        sshCli.send_command(f"user set password={newPassMikChange} {loginMikChange}")
+        print("Password changed successfully!")
+        quesPass = input("Change password for other users?(y/n): ")
+        if quesPass == 'y' or quesPass == 'Y':
+            changePass(sshCli)
+        else:
+            sshCli.disconnect()
+            print("Closed session.")
+            print(" ")
+            authMik()
+    else:
+        print("Wrong login or password! Try again.")
+        changePass(sshCli)
 
-listUsers = sshCli.send_command("/user print detail")
-strStart = "name="
-strEnd = "group"
-countStart = -1
-count = 0
-listStart = 0
+def authMik():
+    # Entering data to connect.
+    ipAddr = input("Enter ip address Mikrotik: ")
+    loginMik = input("Enter login Mikrotik: ")
+    passMik = input("Enter password Mikrotik: ")
 
-# Search for a match on the first character or word.
-resStart = [i for i in range(len(listUsers)) if listUsers.startswith(strStart, i)]
+    mikrotik_router_1 = {
+    'device_type': 'mikrotik_routeros',
+    'host': ipAddr,
+    'port': '22',
+    'username': loginMik,
+    'password': passMik
+    }
 
-# Search for a match on the last character or word.
-resEnd = [i for i in range(len(listUsers)) if listUsers.startswith(strEnd, i)]
+    # Opening ssh connection.
+    sshCli = ConnectHandler(**mikrotik_router_1)
 
-# Merge lists into one.
-resFull = resStart + resEnd
+    listUsers = sshCli.send_command("/user print detail")
+    strStart = "name="
+    strEnd = "group"
+    countStart = -1
+    count = 0
+    listStart = 0
 
-# Get the number of matches.
-while count < len(listUsers):
-    countStart = listUsers.find(strStart, countStart+1)
-    if countStart == -1:
-        break
-    count += 1
-print("Number of users:", count)
+    # Search for a match on the first character or word.
+    resStart = [i for i in range(len(listUsers)) if listUsers.startswith(strStart, i)]
 
-# Show received matches.
-while listStart < count:
-    print(listUsers[resFull[listStart]+5:resFull[listStart+2]])
-    listStart += 1
+    # Search for a match on the last character or word.
+    resEnd = [i for i in range(len(listUsers)) if listUsers.startswith(strEnd, i)]
 
-# Changing the password.
-loginMikChange = input("Enter the username for which you want to change the password: ")    
-newPassMikChange = input(f"Enter a new password for the user {loginMikChange}: ")
-confirmNewPassMikChange = input(f"Confirm new password for user {loginMikChange}: ")
+    # Merge lists into one.
+    resFull = resStart + resEnd
 
-# Checking the correctness of the password entered and, if correct, then change.
-if newPassMikChange == confirmNewPassMikChange:
-    sshCli.send_command(f"user set password={newPassMikChange} {loginMikChange}")
-    print("Password changed successfully!")
-else:
-    print("Wrong login or password!")
+    # Get the number of matches.
+    while count < len(listUsers):
+        countStart = listUsers.find(strStart, countStart+1)
+        if countStart == -1:
+            break
+        count += 1
+    print("Number of users:", count)
 
-# Closing the ssh connection.
-sshCli.disconnect()
+    # Show received matches.
+    while listStart < count:
+        print(listUsers[resFull[listStart]+5:resFull[listStart+2]])
+        listStart += 1
+
+    # Changing the password.
+    changePass(sshCli)
+    sshCli.disconnect()
+
+if __name__ == "__main__":
+    authMik()
