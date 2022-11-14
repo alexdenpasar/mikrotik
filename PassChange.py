@@ -23,7 +23,7 @@ sshCli = ConnectHandler(**mikrotik_router_1)
 listUsers = sshCli.send_command("/user print detail")
 strStart = "name="
 strEnd = "group"
-start = -1
+countStart = -1
 count = 0
 listStart = 0
 
@@ -31,9 +31,9 @@ resStart = [i for i in range(len(listUsers)) if listUsers.startswith(strStart, i
 resEnd = [i for i in range(len(listUsers)) if listUsers.startswith(strEnd, i)]
 resFull = resStart + resEnd
 
-while count < 2:
-    start = listUsers.find(strStart, start+1)
-    if start == -1:
+while count < len(listUsers):
+    countStart = listUsers.find(strStart, countStart+1)
+    if countStart == -1:
         break
     count += 1
 print("Number of users:", count)
