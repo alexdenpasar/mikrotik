@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from netmiko import ConnectHandler
 import getpass
 
@@ -5,6 +7,30 @@ print("########################################")
 print("####  User password change script.  ####")
 print("########################################")
 print(" ")
+
+def authMik():
+    # Entering data to connect.
+    ipAddr = input("Enter ip address Mikrotik: ")
+    loginMik = input("Enter login Mikrotik: ")
+    passMik = getpass.getpass("Enter password Mikrotik: ")
+
+    mikrotik_router_1 = {
+    'device_type': 'mikrotik_routeros',
+    'host': ipAddr,
+    'port': '22',
+    'username': loginMik,
+    'password': passMik
+    }
+
+    # Opening ssh connection.
+    sshCli = ConnectHandler(**mikrotik_router_1)
+
+    # List of users.
+    listUsers(sshCli)
+
+    # Changing the password.
+    changePass(sshCli)
+    sshCli.disconnect()
 
 def changePass(sshCli):
      # Changing the password.
@@ -28,23 +54,9 @@ def changePass(sshCli):
         print("Wrong login or password! Try again.")
         changePass(sshCli)
 
-def authMik():
-    # Entering data to connect.
-    ipAddr = input("Enter ip address Mikrotik: ")
-    loginMik = input("Enter login Mikrotik: ")
-    passMik = getpass.getpass("Enter password Mikrotik: ")
+def listUsers(sshCli):
 
-    mikrotik_router_1 = {
-    'device_type': 'mikrotik_routeros',
-    'host': ipAddr,
-    'port': '22',
-    'username': loginMik,
-    'password': passMik
-    }
-
-    # Opening ssh connection.
-    sshCli = ConnectHandler(**mikrotik_router_1)
-
+    # List of users.
     listUsers = sshCli.send_command("/user print detail")
     strStart = "name="
     strEnd = "group"
@@ -73,10 +85,6 @@ def authMik():
     while listStart < count:
         print(listUsers[resFull[listStart]+5:resFull[listStart+2]])
         listStart += 1
-
-    # Changing the password.
-    changePass(sshCli)
-    sshCli.disconnect()
 
 if __name__ == "__main__":
     authMik()
