@@ -2,6 +2,7 @@
 
 from netmiko import ConnectHandler
 import getpass
+import sys, os
 
 print("########################################")
 print("####  User password change script.  ####")
@@ -9,31 +10,64 @@ print("########################################")
 print(" ")
 
 def authMik():
+    global ipAddr
     # Entering data to connect.
-    ipAddr = input("Enter ip address Mikrotik: ")
+    ipAddrAndPort = input("Enter ip address Mikrotik (ip:port): ")
     loginMik = input("Enter login Mikrotik: ")
     passMik = getpass.getpass("Enter password Mikrotik: ")
+    if ipAddrAndPort.find(":") > 0:
+        ipAddr, Port = ipAddrAndPort.split(':')
+    else:
+        ipAddr = ipAddrAndPort
+        Port = "22"
 
-    mikrotik_router_1 = {
+    mikrotik_router = {
     'device_type': 'mikrotik_routeros',
     'host': ipAddr,
-    'port': '22',
+    'port': Port,
     'username': loginMik,
     'password': passMik
     }
 
     # Opening ssh connection.
-    sshCli = ConnectHandler(**mikrotik_router_1)
+    sshCli = ConnectHandler(**mikrotik_router)
+    os.system('cls||clear')
 
-    # List of users.
-    listUsers(sshCli)
+    # Menu Sheet
+    menuList(ipAddr)
+    menuListNumber(sshCli)
 
-    # Changing the password.
-    changePass(sshCli)
-    sshCli.disconnect()
+def menuList(ipAddr):
+
+    print("########################################")
+    print("####  User password change script.  ####")
+    print("########################################")
+    print(" ")
+    print(f"Connected to {ipAddr}")
+    print(" ")
+    print("1) List of users.")
+    print("2) Change user password.")
+    print("3) Connect to Microtik.")
+    print("4) Exit.")
+
+def menuListNumber(sshCli):
+    
+    # Menu Sheet
+    menuNumber = input("Select the menu number: ")
+
+    if menuNumber == str(1):
+        listUsers(sshCli)
+    elif menuNumber == str(2):
+        changePass(sshCli)
+    elif menuNumber == str(3):
+        authMik()
+    elif menuNumber == str(4):
+        sshCli.disconnect()
+        sys.exit()
 
 def changePass(sshCli):
-     # Changing the password.
+
+    # Changing the password.
     loginMikChange = input("Enter the username for which you want to change the password: ")   
     newPassMikChange = getpass.getpass(f"Enter a new password for the user {loginMikChange}: ")
     confirmNewPassMikChange = getpass.getpass(f"Confirm new password for user {loginMikChange}: ")
@@ -46,10 +80,9 @@ def changePass(sshCli):
         if quesPass == 'y' or quesPass == 'Y':
             changePass(sshCli)
         else:
-            sshCli.disconnect()
-            print("Closed session.")
-            print(" ")
-            authMik()
+            os.system('cls||clear')
+            menuList(ipAddr)
+            menuListNumber(sshCli)
     else:
         print("Wrong login or password! Try again.")
         changePass(sshCli)
@@ -85,6 +118,8 @@ def listUsers(sshCli):
     while listStart < count:
         print(listUsers[resFull[listStart]+5:resFull[listStart+2]])
         listStart += 1
+    
+    menuListNumber(sshCli)
 
 if __name__ == "__main__":
     authMik()
