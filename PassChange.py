@@ -1,16 +1,16 @@
 from netmiko import ConnectHandler
+import getpass
 
 print("########################################")
 print("####  User password change script.  ####")
 print("########################################")
 print(" ")
 
-
 def changePass(sshCli):
      # Changing the password.
-    loginMikChange = input("Enter the username for which you want to change the password: ")    
-    newPassMikChange = input(f"Enter a new password for the user {loginMikChange}: ")
-    confirmNewPassMikChange = input(f"Confirm new password for user {loginMikChange}: ")
+    loginMikChange = input("Enter the username for which you want to change the password: ")   
+    newPassMikChange = getpass.getpass(f"Enter a new password for the user {loginMikChange}: ")
+    confirmNewPassMikChange = getpass.getpass(f"Confirm new password for user {loginMikChange}: ")
 
     # Checking the correctness of the password entered and, if correct, then change.
     if newPassMikChange == confirmNewPassMikChange:
@@ -32,7 +32,7 @@ def authMik():
     # Entering data to connect.
     ipAddr = input("Enter ip address Mikrotik: ")
     loginMik = input("Enter login Mikrotik: ")
-    passMik = input("Enter password Mikrotik: ")
+    passMik = getpass.getpass("Enter password Mikrotik: ")
 
     mikrotik_router_1 = {
     'device_type': 'mikrotik_routeros',
