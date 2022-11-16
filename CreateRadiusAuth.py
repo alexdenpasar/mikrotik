@@ -1,11 +1,12 @@
 import time
 from netmiko import ConnectHandler
 import sys
+import getpass
 
 # Entering data to connect.
 ipAddr = input("Enter ip address Mikrotik: ")
 loginMik = input("Enter login Mikrotik: ")
-passMik = input("Enter password Mikrotik: ")
+passMik = getpass.getpass("Enter password Mikrotik: ")
 
 mikrotik_router_1 = {
 'device_type': 'mikrotik_routeros',
