@@ -4,20 +4,26 @@ import sys
 import getpass
 
 # Entering data to connect.
-ipAddr = input("Enter ip address Mikrotik: ")
+# Entering data to connect.
+ipAddrAndPort = input("Enter ip address Mikrotik (ip:port): ")
 loginMik = input("Enter login Mikrotik: ")
 passMik = getpass.getpass("Enter password Mikrotik: ")
+if ipAddrAndPort.find(":") > 0:
+    ipAddr, Port = ipAddrAndPort.split(':')
+else:
+    ipAddr = ipAddrAndPort
+    Port = "22"
 
-mikrotik_router_1 = {
+mikrotik_router = {
 'device_type': 'mikrotik_routeros',
 'host': ipAddr,
-'port': '22',
+'port': Port,
 'username': loginMik,
 'password': passMik
 }
 
 # Opening ssh connection.
-sshCli = ConnectHandler(**mikrotik_router_1)
+sshCli = ConnectHandler(**mikrotik_router)
 
 addressRadiusServer = input("Enter ip address Radius Server: ")
 secretRadius = input("Enter secret Radius Server: ")
