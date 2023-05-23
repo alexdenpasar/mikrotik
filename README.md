@@ -6,3 +6,7 @@
 	Activation of authorization on the device through the radius server.
 ## PassChange.py
 	Script to change password.
+## BackupConf.rsc
+	Script to create an encrypted backup of the RouterOS configuration.
+## BackupConfNoEncrypt.rsc
+	Script to create an unencrypted RouterOS configuration backup.
