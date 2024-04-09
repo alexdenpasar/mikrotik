@@ -1,32 +1,31 @@
 # BEGIN SETUP
-# èìÿ ñêðèïòà â scheduler
+
 :local scheduleName "on_login"
-# ìûëî íà êîòîðîå îòïðàâëÿòü îò÷åò
-:local emailAddress "alert@komplex-group.ru"
-# çàïèñè â ëîãå ïî ìàñêå, êîòîðûå ïîïàäàþò â îò÷åò
+
+:local emailAddress "alert@example.com"
+
 :local startBuf [:toarray [/log find message~"logged in" || message~"login failure"]]
-# ñëîâà-èñêëþ÷åíèÿ. Ñþäà äîáàâëÿåì íàøè "ëåãèòèìíûå" IP, èëè, íàïðèìåð, ñåðâèñû ïî êîòîðûì íå õîòèì îòñëåæèâàòü ïîäêëþ÷åíèÿ.
-:local removeThese {"kovrovskiy";"192.168.254.250";"192.168.254.28"}
-# smtp ñåðâåð
-:local smtpserv "192.168.254.9"
-# ìûëî ñ êîòîðîãî áóäåò âñå îòïðàâëÿòüñÿ
-:local email "mikrotik@komplex-group.ru"
-# ïàðîëü ê ìûëó
-:local pass "DataCenter2!"
+
+:local removeThese {"exanmple";"192.168.1.250";"192.168.1.28"}
+:local smtpserv "192.168.1.9"
+
+:local email "mikrotik@example.com"
+
+:local pass "Pass1234"
 :local sysname [/system identity get name];
 # END SETUP
-# ïðîâåðÿåì ñóùåñòâóåò ëè çàïèñü â ïëàíèðîâùèêå, åñëè íåò - âûäàåì îøèáêó â ëîã
+
 :if ([:len [/system scheduler find name="$scheduleName"]] = 0) do={
   /log warning "[LOGMON] ERROR: Schedule does not exist. Create schedule and edit script to match name"
 }
-# îïðåäåëÿåì ïîñëåäíåå âðåìÿ çàïóñêà ñêðèïòà
+
 :local lastTime [/system scheduler get [find name="$scheduleName"] comment]
 # for checking time of each log entry
 :local currentTime
 # log message
 :local message
 
-# ââîäèì ïåðåìåííóþ output
+
 :local output
 :local keepOutput false
 # if lastTime is empty, set keepOutput to true
