@@ -1,8 +1,8 @@
 # automated backup export ftp
 # ftp configuration
-:local ftphost "192.168.254.218"
-:local ftpuser "INFO\backup"
-:local ftppassword "KomplexBackup-2"
+:local ftphost "192.168.1.2"
+:local ftpuser "ftp-user"
+:local ftppassword "ftp-password"
 :local ftppath "Mikrotik"
 # months array
 :local months ("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec");
