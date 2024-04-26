@@ -1,6 +1,4 @@
-# Mikrotik
-	A set of scripts for automating the operation of Mikrotik devices.
-	The script uses an ssh connection (port 22 must be open)
+# A set of scripts for automating MikroTik device operations. Some scripts use SSH connection (port 22 should be open).
 	
 ## CreateRadiusAuth.py
 	Activation of authorization on the device through the radius server.
