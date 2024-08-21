@@ -10,3 +10,5 @@
 	Script to create an unencrypted RouterOS configuration backup.
 ## Drop_brute_force_password.rsc
 	Script for blocking IPs from which brute-force password guessing attacks are conducted. Replace with your values for incoming interface, protocol, and port.
+## EnableAndDisableInterface.rsc
+	The script checks the availability of host $host1. If it is not available, it checks the availability of the second host $host2. If the second host is not available, it disables the specified interface.
