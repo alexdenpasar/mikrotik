@@ -6,14 +6,14 @@ A comprehensive collection of scripts for automating MikroTik RouterOS device op
 
 ## 📋 Table of Contents
 
-- [Script Descriptions](#script-descriptions)
-- [System Requirements](#system-requirements)
-- [Installation & Usage](#installation--usage)
-- [Configuration](#configuration)
-- [Security](#security)
-- [Contributing](#contributing)
-- [Support](#support)
-- [License](#license)
+- [Script Descriptions](#-script-descriptions)
+- [System Requirements](#-system-requirements)
+- [Installation & Usage](#-installation--usage)
+- [Configuration](#-configuration)
+- [Security](#-security)
+- [Contributing](#-contributing)
+- [Support](#-support)
+- [License](#-license)
 
 ## 🛠 Script Descriptions
 
